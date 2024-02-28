@@ -1,7 +1,10 @@
-<div class="border-y">
-  <header class="header items-center page-width">
-  
-      <div class="header__logo mx-auto my-2 md:my-0 md:mr-auto md:ml-0" style="max-width: {{ section.settings.logo_width }}px;">
+{% comment %}
+  <div class="border-y">
+    <header class="items-center header page-width">
+      <div
+        class="mx-auto my-2 header__logo md:my-0 md:mr-auto md:ml-0"
+        style="max-width: {{ section.settings.logo_width }}px;"
+      >
         {% if section.settings.logo != blank %}
           <a href="/" class="header__logo">
             {{ section.settings.logo | image_url: width: 400 | image_tag: loading: 'lazy' }}
@@ -12,44 +15,48 @@
           </a>
         {% endif %}
       </div>
-  
-      <nav class="header__menu flex" x-data>
+
+      <nav class="flex header__menu" x-data>
         <button class="md:hidden" @click="$dispatch('toggle-menu')" type="button">
           {% render 'icon-menu', class: 'w-10' %}
         </button>
 
-        <ul class="header__menu-nav hidden md:flex">
+        <ul class="hidden header__menu-nav md:flex">
           {% for link in section.settings.menu.links %}
             {% if link.links != blank %}
-              <li class="nav__item py-5 px-4 block relative">
-                  <a href="{{ link.url }}">{{ link.title }}</a>
-                  <ul class="nav__item-submenu absolute bg-white border py-3 px-4 min-w-[160px] top-16 left-1/2 transform -translate-x-1/2">
-                    {% for sublink in linklists[link.handle].links %}
-                      <li>
-                        <a class="block py-1 hover:opacity-75 " href="{{ sublink.url }}">
-                          {{ sublink.title }}
-                        </a>
-                      </li>
-                    {% endfor %}
-                  </ul>
+              <li class="relative block px-4 py-5 nav__item">
+                <a href="{{ link.url }}">{{ link.title }}</a>
+                <ul class="nav__item-submenu absolute bg-white border py-3 px-4 min-w-[160px] top-16 left-1/2 transform -translate-x-1/2">
+                  {% for sublink in linklists[link.handle].links %}
+                    <li>
+                      <a class="block py-1 hover:opacity-75 " href="{{ sublink.url }}">
+                        {{ sublink.title }}
+                      </a>
+                    </li>
+                  {% endfor %}
+                </ul>
               </li>
             {% else %}
               <li>
-                <a class="nav__item py-5 px-4 block" href="{{ link.url }}"> {{ link.title }}</a>
+                <a class="block px-4 py-5 nav__item" href="{{ link.url }}"> {{ link.title }}</a>
               </li>
             {% endif %}
           {% endfor %}
         </ul>
       </nav>
-  
-      <div class="header__icons flex items-center justify-end space-x-5"
+
+      <div
+        class="flex items-center justify-end space-x-5 header__icons"
         x-data="{ cart_count: {{ cart.item_count }} }"
-        @cart-count-updated.window="cart_count = $event.detail">
+        @cart-count-updated.window="cart_count = $event.detail"
+      >
         {%- if shop.customer_accounts_enabled -%}
-          <div class="relative account-menu-wrapper z-10">
-            <a href="{{ routes.account_url }}" 
+          <div class="relative z-10 account-menu-wrapper">
+            <a
+              href="{{ routes.account_url }}"
               title="account link"
-              class="header__icon block text-center">
+              class="block text-center header__icon"
+            >
               {% render 'icon-account', class: 'w-10 mx-auto' %}
               <span class="sr-only">
                 {%- liquid
@@ -64,24 +71,436 @@
           </div>
         {%- endif -%}
 
-          <button 
-            type="button"
-            title="Cart button"
-            @click="$dispatch('toggle-cart')"
-            class="header__icon text-center relative">
-              {% render 'icon-cart', class: 'w-10' %}
-              <span class="sr-only">{{ 'templates.cart.cart' | t }}</span>
-              <span x-text="cart_count" class="cart__count min-w-[22px] text-sm min-h-[22px] absolute grid place-content-center rounded-full -top-3 -right-1 text-white bg-black"> {{ cart.item_count }} </span>
-          </button>
+        <button
+          type="button"
+          title="Cart button"
+          @click="$dispatch('toggle-cart')"
+          class="relative text-center header__icon"
+        >
+          {% render 'icon-cart', class: 'w-10' %}
+          <span class="sr-only">{{ 'templates.cart.cart' | t }}</span>
+          <span
+            x-text="cart_count"
+            class="cart__count min-w-[22px] text-sm min-h-[22px] absolute grid place-content-center rounded-full -top-3 -right-1 text-white bg-black"
+          >
+            {{ cart.item_count }}
+          </span>
+        </button>
       </div>
-  
-  </header>
+    </header>
 
+    {% render 'mobile-menu' %}
+  </div>
+{% endcomment %}
 
-  {% render 'mobile-menu' %}
-  
+<header>
+  <nav
+    id="header"
+    class="fixed top-0 left-0 transition-all duration-700 ease-in-out translate-y-0 h-auto bg-darkBg w-full font-Montserrat !z-50 dark:bg-darkBg">
+    {% comment %} Flowbite navbar {% endcomment %}
 
-</div>
+    <div class="border-b-4 bg-primary dark:bg-darkBg font-Montserrat border-slate-800 border-opacity-10 dark:border-yellow-600">
+      <div class="flex items-center justify-between gap-10 px-5 py-4 max-w-screen">
+        {% comment %} Hamburger menu {% endcomment %}
+        <div class="flex items-center gap-4">
+          <button
+            type="button"
+            data-drawer-target="drawer-navigation"
+            data-drawer-show="drawer-navigation"
+            aria-controls="drawer-navigation"
+            class="block lg:hidden"
+          >
+            <i class="text-xl text-black fa-solid fa-bars dark:text-primary"></i>
+          </button>
+          {% if section.settings.logo != blank %}
+            <a href="/" class="header__logo">
+              {{ section.settings.logo | image_url: width: 400 | image_tag: loading: 'lazy' }}
+            </a>
+          {% else %}
+            <h1 class="text-lg font-extrabold md:text-3xl font-Montserrat dark:text-primary">
+              <a href="/">{{ shop.name }}</a>
+            </h1>
+          {% endif %}
+        </div>
+        {% comment %} Search Box {% endcomment %}
+        <div class="lg:flex hidden items-center bg-white rounded-md shadow-sm px-3 py-1 w-[60%]">
+          {% comment %} <img src="{{ 'search.png' | asset_url }}" alt="" width="20" height="20"> {% endcomment %}
+          <i class="text-xl text-black fa-solid fa-magnifying-glass dark:text-primary"></i>
+          <input
+            type="email"
+            name="email"
+            class="block w-full px-4 py-1 bg-white border-none border-slate-300 placeholder-slate-400 focus-within:outline-0 focus:border-0 focus:ring-0 sm:text-base"
+            placeholder="Search Brands,Products"
+          >
+        </div>
+        <div class="flex items-center space-x-6 rtl:space-x-reverse">
+          <button
+            id="theme-toggle"
+            type="button"
+            class="text-black dark:text-primary hover:shadow-md hover:shadow-slate-900 dark:hover:bg-gray-700 dark:hover:shadow-md dark:hover:shadow-yellow-600 focus:outline-none focus:ring-0 rounded-lg text-sm p-2.5"
+          >
+            <svg
+              id="theme-toggle-dark-icon"
+              class="hidden w-6 h-6"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+            </svg>
+            <svg
+              id="theme-toggle-light-icon"
+              class="hidden w-6 h-6"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+            </svg>
+          </button>
+          <a href="/" class="flex items-center gap-2">
+            {% comment %} <img src="{{ 'login-logo.png' | asset_url }}" alt="" width="24" height="24"> {% endcomment %}
+            <i class="text-2xl fa-solid fa-circle-user dark:text-primary"></i>
+            <h3 class="hidden font-medium font-Montserrat dark:text-darkText md:block">Login</h3>
+          </a>
+          <a href="/" class="flex items-center gap-2">
+            {% comment %} <img src="{{ 'add-cart.png' | asset_url }}" alt="" width="26" height="26"> {% endcomment %}
+            <i class="text-xl fa-solid fa-cart-plus dark:text-primary"></i>
+            <h3 class="hidden font-medium font-Montserrat dark:text-darkText md:block">Cart</h3>
+          </a>
+        </div>
+      </div>
+    </div>
+    {% comment %}Tablet view Search box {% endcomment %}
+    <div class="block w-full px-10 py-4 lg:hidden dark:bg-darkBg font-Montserrat">
+      <div class="flex items-center w-full px-3 py-1 bg-white rounded-md shadow-sm">
+        {% comment %} <img src="{{ 'search.png' | asset_url }}" alt="" width="20" height="20"> {% endcomment %}
+        <i class="text-xl text-black fa-solid fa-magnifying-glass dark:text-primary"></i>
+        <input
+          type="email"
+          name="email"
+          class="block w-full px-4 py-1 bg-white border-none border-slate-300 placeholder-slate-400 focus-within:outline-0 focus:border-0 focus:ring-0 sm:text-base"
+          placeholder="Search Brands,Products"
+        >
+      </div>
+    </div>
+    {% comment %} Menu Bar {% endcomment %}
+    <div class="hidden lg:block bg-primary dark:bg-darkBg font-Montserrat">
+      <div class="px-12 max-w-screen">
+        <div class="flex items-center">
+          <ul class="flex flex-row mt-0 space-x-8 text-sm font-medium rtl:space-x-reverse">
+            {% for link in section.settings.menu.links %}
+              {% if link.links != blank %}
+                <li class="relative py-4 group">
+                  {% comment %} id="{{ link.title }}"
+                  data-dropdown-toggle="dropdownHover"
+                  data-dropdown-trigger="click" {% endcomment %}
+                  <a
+                    href="{{ link.url }}"
+                    class="inline-flex items-center text-sm font-medium text-center text-black underline cursor-pointer dark:text-darkText">
+                    {{ link.title }}
+                    <svg
+                        class="w-2.5 h-2.5 ms-3 dark:text-primary"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 10 6">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                    </svg>
+                  </a>
+
+                  <!-- Dropdown menu -->
+                  {% comment %} id="dropdownHover" {% endcomment %}
+                  <div
+                    class="hidden group-hover:block absolute top-[52px] left-0 !z-50 bg-white dark:bg-darkBg divide-y divide-gray-100 rounded-lg shadow w-44 overflow-hidden group-hover:duration-1000" >
+                    <h3 class="block px-4 py-2 bg-white hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white dark:bg-darkBg">
+                      <a href="/">Gainers</a>
+                    </h3>
+                    <ul
+                      class="py-2 text-sm text-gray-700 bg-white dark:text-darkText dark:bg-darkBg"
+                      aria-labelledby="dropdownHoverButton">
+                      {% for sublink in link.links %}
+                          <li>
+                            <a
+                              href="{{ sublink.url }}"
+                              class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-darkBg dark:hover:text-white "
+                            >
+                              {{- sublink.title -}}
+                            </a>
+                          </li>
+                      {% endfor %}
+                    </ul>
+                  </div>
+                </li>
+              {% else %}
+                {% comment %}
+                  <li>
+                    <div
+                      id="dropdownHoverButton1"
+                      data-dropdown-toggle="dropdownHover1"
+                      data-dropdown-trigger="click"
+                      class="inline-flex items-center text-sm font-medium text-center text-black underline cursor-pointer dark:text-darkText"
+                      {% comment %} type="button" {% endcomment %}
+                    >
+                      Vitamins & Supplements
+                      <svg
+                        class="w-2.5 h-2.5 ms-3 dark:text-primary"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 10 6"
+                      >
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                      </svg>
+                    </div>
+
+                    <!-- Dropdown menu -->
+                    <div
+                      id="dropdownHover1"
+                      class="!z-50 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-darkBg overflow-hidden"
+                    >
+                      <h3 class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-darkBg dark:hover:text-white ">
+                        <a href="/">Gainers</a>
+                      </h3>
+                      <ul class="py-2 text-sm text-gray-700 dark:text-darkText" aria-labelledby="dropdownHoverButton">
+                        <li>
+                          <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-darkBg dark:hover:text-white"
+                            >Dashboard</a
+                          >
+                        </li>
+                        <li>
+                          <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-darkBg dark:hover:text-white"
+                            >Settings</a
+                          >
+                        </li>
+                        <li>
+                          <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-darkBg dark:hover:text-white"
+                            >Earnings</a
+                          >
+                        </li>
+                        <li>
+                          <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-darkBg dark:hover:text-white"
+                            >Sign out</a
+                          >
+                        </li>
+                      </ul>
+                    </div>
+                  </li>
+                  <li>
+                    <div
+                      id="dropdownHoverButton2"
+                      data-dropdown-toggle="dropdownHover2"
+                      data-dropdown-trigger="click"
+                      class="inline-flex items-center text-sm font-medium text-center text-black underline cursor-pointer dark:text-darkText"
+                      {% comment %} type="button" {% endcomment %}
+                    >
+                      Sports Nutrition
+                      <svg
+                        class="w-2.5 h-2.5 ms-3 dark:text-primary"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 10 6"
+                      >
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                      </svg>
+                    </div>
+
+                    <!-- Dropdown menu -->
+                    <div
+                      id="dropdownHover2"
+                      class="!z-50 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-darkBg overflow-hidden"
+                    >
+                      <h3 class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-darkBg dark:hover:text-white ">
+                        <a href="/">Gainers</a>
+                      </h3>
+                      <ul class="py-2 text-sm text-gray-700 dark:text-darkText" aria-labelledby="dropdownHoverButton">
+                        <li>
+                          <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-darkBg dark:hover:text-white"
+                            >Dashboard</a
+                          >
+                        </li>
+                        <li>
+                          <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-darkBg dark:hover:text-white"
+                            >Settings</a
+                          >
+                        </li>
+                        <li>
+                          <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-darkBg dark:hover:text-white"
+                            >Earnings</a
+                          >
+                        </li>
+                        <li>
+                          <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-darkBg dark:hover:text-white"
+                            >Sign out</a
+                          >
+                        </li>
+                      </ul>
+                    </div>
+                  </li>
+                {% endcomment %}
+                <li class="py-4">
+                  <a  class="inline-flex items-center text-sm font-medium text-center text-black underline cursor-pointer dark:text-darkText" href="{{ link.url }}"> {{ link.title }}</a>
+                </li>
+              {% endif %}
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+    {% comment %} Drawer {% endcomment %}
+    <!-- drawer component -->
+    <div
+      id="drawer-navigation"
+      class="fixed top-0 left-0 z-40 h-screen mb-5 overflow-y-auto transition-transform -translate-x-full bg-primary drawer-container-sm md:drawer-container dark:bg-darkBg"
+      tabindex="-1"
+      aria-labelledby="drawer-navigation-label">
+      <h5 id="drawer-navigation-label" class="p-4 text-base font-semibold text-black uppercase dark:text-darkText">
+        Menu
+      </h5>
+      <button
+        type="button"
+        data-drawer-hide="drawer-navigation"
+        aria-controls="drawer-navigation"
+        class="bg-transparent  rounded-lg text-sm w-8 h-8 absolute top-2.5 end-2.5 inline-flex items-center justify-center ">
+        <svg
+          class="w-5 h-5 text-black dark:text-primary"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 14 14" >
+          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+        </svg>
+        <span class="sr-only">Close menu</span>
+      </button>
+      <div class="py-4 overflow-y-auto">
+        <ul class="space-y-2 overflow-hidden font-medium even:bg-[#99820c] even:dark:bg-primary/25">
+          {% for link in section.settings.menu.links %}
+            {% if link.links != blank %}
+          <li class="px-4">
+            <button
+              type="button"
+              class="flex items-center w-full p-2 text-base text-black transition duration-75 rounded-lg group dark:text-darkText"
+              aria-controls="{{link.title}}"
+              data-collapse-toggle="{{link.title}}" >
+              {% comment %} <svg
+                class="flex-shrink-0 w-5 h-5 text-black transition duration-75 group-hover:text-gray-900 dark:text-primary dark:group-hover:text-white"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="currentColor"
+                viewBox="0 0 18 21">
+                <path d="M15 12a1 1 0 0 0 .962-.726l2-7A1 1 0 0 0 17 3H3.77L3.175.745A1 1 0 0 0 2.208 0H1a1 1 0 0 0 0 2h.438l.6 2.255v.019l2 7 .746 2.986A3 3 0 1 0 9 17a2.966 2.966 0 0 0-.184-1h2.368c-.118.32-.18.659-.184 1a3 3 0 1 0 3-3H6.78l-.5-2H15Z"/>
+              </svg> {% endcomment %}
+              <a  href="{{ link.url }}" class="flex-1 text-left ms-3 rtl:text-right whitespace-nowrap">{{ link.title }}</a>
+              <svg
+                class="w-3 h-3 text-black dark:text-primary"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 10 6">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+              </svg>
+            </button>
+            <ul id="{{link.title}}" class="hidden mb-4 space-y-5">
+              {% for sublink in link.links %}
+              <li>
+                <a
+                  href="{{ sublink.url }}"
+                  class="flex items-center w-full p-2 text-gray-900 transition duration-75 pl-14 group dark:text-white  border-b border-[#B19111] mx-8"
+                  >{{- sublink.title -}}</a
+                >
+              </li>
+            {% endfor %}
+              {% comment %} <li>
+                <a
+                  href="#"
+                  class="flex items-center w-full p-2 text-gray-900 transition duration-75 pl-14 group dark:text-white  border-b border-[#B19111] mx-8"
+                  >Billing</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="flex items-center w-full p-2 text-gray-900 transition duration-75 pl-14 group dark:text-white  border-b border-[#B19111] mx-8"
+                  >Invoice</a
+                >
+              </li> {% endcomment %}
+            </ul>
+          </li>
+          {% else %}
+              <li class="px-4">
+                <a  class="w-full p-2 text-left ms-3 rtl:text-right whitespace-nowrap" href="{{ link.url }}"> {{ link.title }}</a>
+                </li>
+          {% comment %} <li>
+            <div class="bg-[#99820c] dark:bg-primary/25 px-4">
+              <button
+                type="button"
+                class="flex items-center w-full p-2 text-base text-black transition duration-75 group dark:text-darkText "
+                aria-controls="dropdown-2"
+                data-collapse-toggle="dropdown-2"
+              >
+                <svg
+                  class="flex-shrink-0 w-5 h-5 text-black transition duration-75 group-hover:text-gray-900 dark:text-primary dark:group-hover:text-white"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  viewBox="0 0 18 21"
+                >
+                  <path d="M15 12a1 1 0 0 0 .962-.726l2-7A1 1 0 0 0 17 3H3.77L3.175.745A1 1 0 0 0 2.208 0H1a1 1 0 0 0 0 2h.438l.6 2.255v.019l2 7 .746 2.986A3 3 0 1 0 9 17a2.966 2.966 0 0 0-.184-1h2.368c-.118.32-.18.659-.184 1a3 3 0 1 0 3-3H6.78l-.5-2H15Z"/>
+                </svg>
+                <span class="flex-1 text-left ms-3 rtl:text-right whitespace-nowrap">Vitamins & Supplements </span>
+                <svg
+                  class="w-3 h-3 text-black dark:text-primary"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 10 6"
+                >
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                </svg>
+              </button>
+            </div>
+            <ul id="dropdown-2" class="hidden py-2 mb-4 space-y-5 bg-primary dark:bg-transparent">
+              <li>
+                <a
+                  href="#"
+                  class="flex items-center w-full p-2 text-gray-900 transition duration-75 pl-14 group dark:text-white  border-b border-[#B19111] mx-8"
+                  >Products</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="flex items-center w-full p-2 text-gray-900 transition duration-75 pl-14 group dark:text-white  border-b border-[#B19111] mx-8"
+                  >Billing</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="flex items-center w-full p-2 text-gray-900 transition duration-75 pl-14 group dark:text-white  border-b border-[#B19111] mx-8"
+                  >Invoice</a
+                >
+              </li>
+            </ul>
+          </li> {% endcomment %}
+        {% endif %}
+      {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>
+
+ <style>
+  .background{
+    color : #FFFFFF
+  }
+
+  .dark\:background:where(.dark, .dark *) 
+    color : {{ section.settings.text_dark }}
+  }
+</style> 
 
 <script type="application/ld+json">
   {
@@ -108,7 +527,7 @@
 </script>
 
 {%- if request.page_type == 'index' -%}
-  {% assign potential_action_target = shop.url | append: routes.search_url | append: "?q={search_term_string}" %}
+  {% assign potential_action_target = shop.url | append: routes.search_url | append: '?q={search_term_string}' %}
   <script type="application/ld+json">
     {
       "@context": "http://schema.org",
@@ -143,6 +562,20 @@
       "default": 100,
       "unit": "t:sections.header.settings.logo_width.unit",
       "label": "t:sections.header.settings.logo_width.label"
+    },
+    {
+      "type": "color",
+      "id": "text_light",
+      "label": "t:sections.header.settings.text_light.label",
+      "default": "colors_text",
+      "info": "t:sections.header.settings.text_light.info"
+    },
+    {
+      "type": "color",
+      "id": "text_dark",
+      "label": "t:sections.header.settings.text_dark.label",
+      "default": "colors_text_1",
+      "info": "t:sections.header.settings.text_dark.info"
     },
     {
       "type": "select",

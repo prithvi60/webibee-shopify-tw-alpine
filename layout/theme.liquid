@@ -12,9 +12,9 @@
       <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32 }}">
     {%- endif -%}
 
-    {%- unless settings.type_header_font.system? and settings.type_body_font.system? -%}
+    {% comment %} {%- unless settings.type_header_font.system? and settings.type_body_font.system? -%}
       <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
-    {%- endunless -%}
+    {%- endunless -%} {% endcomment %}
 
     <title>
       {{ page_title }}
@@ -33,38 +33,52 @@
     {{ content_for_header }}
 
     {% render 'head-styles' %}
-    
-    <link rel="stylesheet" href="{{ 'app.css' | asset_url }}">
-    <script src="{{ 'app.js' | asset_url }}"></script>
+    {% comment %} <link rel="stylesheet" href="{{ 'app.css' | asset_url }}"> {% endcomment %}
+    {{ 'app.css' | asset_url | stylesheet_tag }}
+    {{"//cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" | stylesheet_tag}}
+    {{'//cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css' | stylesheet_tag }}
 
-    {%- unless settings.type_body_font.system? -%}
-      <link rel="preload" as="font" href="{{ settings.type_body_font | font_url }}" type="font/woff2" crossorigin>
+    {% comment %} {%- unless settings.type_body_font.system? -%}
+      <link href="{{ settings.type_body_font | font_url | | preload_tag: as: 'font'}}" type="font/woff2" crossorigin>
     {%- endunless -%}
     {%- unless settings.type_header_font.system? -%}
-      <link rel="preload" as="font" href="{{ settings.type_header_font | font_url }}" type="font/woff2" crossorigin>
-    {%- endunless -%}
+      <link href="{{ settings.type_header_font | font_url | preload_tag: as: 'font' }}" type="font/woff2" crossorigin>
+    {%- endunless -%} {% endcomment %}
 
-    {%- if settings.predictive_search_enabled -%}
+    {% comment %} {%- if settings.predictive_search_enabled -%}
       <link rel="stylesheet" href="{{ 'component-predictive-search.css' | asset_url }}" media="print" onload="this.media='all'">
-    {%- endif -%}
+    {%- endif -%} {% endcomment %}
 
     <script>document.documentElement.className = document.documentElement.className.replace('no-js', 'js');
     if (Shopify.designMode) {
       document.documentElement.classList.add('shopify-design-mode');
     }
     </script>
+    <script>
+      if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+      } else {
+          document.documentElement.classList.remove('dark')
+      }
+  </script>
   </head>
 
   <body class="gradient">
-    <a class="skip-to-content-link button sr-only" href="#MainContent">
+    {% comment %} <a class="sr-only skip-to-content-link button" href="#MainContent">
       {{ "accessibility.skip_to_text" | t }}
-    </a>
+    </a> {% endcomment %}
 
     {% section 'announcement-bar' %}
     {% section 'header' %}
-    {% render 'cart-drawer' %}
+    {% comment %} {% render 'cart-drawer' %} {% endcomment %}
     
-    <main id="MainContent" class="content-for-layout focus-none !bg-yellow-300" role="main" tabindex="-1">
+    {% comment %} <main id="MainContent" class="bg-yellow-300 content-for-layout focus-none" role="main" tabindex="-1">
+    </main> {% endcomment %}
+    {% comment %} <main id="MainContent" class="content-for-layout focus-none" role="main" tabindex="-1">
+      {{ content_for_layout }}
+    </main> {% endcomment %}
+    {% comment %} {{ content_for_layout }} {% endcomment %}
+    <main id="main" role="main">
       {{ content_for_layout }}
     </main>
 
@@ -76,9 +90,12 @@
 
     {% render 'footer-scripts' %}
 
-    {%- if settings.predictive_search_enabled -%}
+    {% comment %} {%- if settings.predictive_search_enabled -%}
       <script src="{{ 'predictive-search.js' | asset_url }}" defer="defer"></script>
-    {%- endif -%}
-    
+    {%- endif -%} {% endcomment %}
+    <script src="{{ 'app.js' | asset_url }}" defer></script>
+    <script src="{{ 'theme.js' | asset_url }}" defer="defer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js" defer></script> 
+    <script src="{{ 'scrollreveal.min.js' | asset_url }}" defer="defer"></script>
   </body>
 </html>

@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+    .drawer-container {
+      width: calc(100vw - 45%);
+    }
+
+    .drawer-container-sm {
+      width: 85vw;
+    }
+  }

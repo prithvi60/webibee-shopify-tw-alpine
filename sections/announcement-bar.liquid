@@ -1,4 +1,4 @@
-{% for block in section.blocks %}
+{% comment %} {% for block in section.blocks %}
     <div class="py-3 {{ section.settings.text_align }}" style="background-color: {{ block.settings.bg_color }}; color: {{ block.settings.text_color }}">
       {{template }} of demo theme
     </div>
@@ -62,4 +62,4 @@
     ]
   }
 }
-{% endschema %}
+{% endschema %} {% endcomment %}
