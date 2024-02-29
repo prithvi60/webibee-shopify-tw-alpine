@@ -64,21 +64,15 @@
   </head>
 
   <body class="gradient">
-    {% comment %} <a class="sr-only skip-to-content-link button" href="#MainContent">
+    <a class="sr-only skip-to-content-link button" href="#MainContent">
       {{ "accessibility.skip_to_text" | t }}
-    </a> {% endcomment %}
+    </a>
 
     {% section 'announcement-bar' %}
     {% section 'header' %}
-    {% comment %} {% render 'cart-drawer' %} {% endcomment %}
+    {% render 'cart-drawer' %}
     
-    {% comment %} <main id="MainContent" class="bg-yellow-300 content-for-layout focus-none" role="main" tabindex="-1">
-    </main> {% endcomment %}
-    {% comment %} <main id="MainContent" class="content-for-layout focus-none" role="main" tabindex="-1">
-      {{ content_for_layout }}
-    </main> {% endcomment %}
-    {% comment %} {{ content_for_layout }} {% endcomment %}
-    <main id="main" role="main">
+    <main id="MainContent" class="content-for-layout focus-none !bg-yellow-300" role="main" tabindex="-1">
       {{ content_for_layout }}
     </main>
 

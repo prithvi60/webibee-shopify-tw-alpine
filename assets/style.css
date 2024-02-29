@@ -669,24 +669,8 @@ video {
   top: 0.75rem;
 }
 
-.left-5 {
-  left: 1.25rem;
-}
-
-.top-5 {
-  top: 1.25rem;
-}
-
-.left-2 {
-  left: 0.5rem;
-}
-
-.top-8 {
-  top: 2rem;
-}
-
-.top-20 {
-  top: 5rem;
+.top-\[52px\] {
+  top: 52px;
 }
 
 .isolate {
@@ -1965,6 +1949,15 @@ video {
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+.drawer-container-sm {
+  width: 85vw;
+}
+
+.even\:bg-\[\#99820c\]:nth-child(even) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(153 130 12 / var(--tw-bg-opacity));
+}
+
 .focus-within\:outline-0:focus-within {
   outline-width: 0px;
 }
@@ -1972,16 +1965,6 @@ video {
 .hover\:bg-gray-100:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(243 244 246 / var(--tw-bg-opacity));
-}
-
-.hover\:bg-gray-200:hover {
-  --tw-bg-opacity: 1;
-  background-color: rgb(229 231 235 / var(--tw-bg-opacity));
-}
-
-.hover\:text-gray-900:hover {
-  --tw-text-opacity: 1;
-  color: rgb(17 24 39 / var(--tw-text-opacity));
 }
 
 .hover\:text-white:hover {
@@ -2040,10 +2023,6 @@ video {
   --tw-ring-color: rgb(255 255 255 / var(--tw-ring-opacity));
 }
 
-.group:hover .group-hover\:absolute {
-  position: absolute;
-}
-
 .group:hover .group-hover\:block {
   display: block;
 }
@@ -2055,6 +2034,10 @@ video {
 .group:hover .group-hover\:text-gray-900 {
   --tw-text-opacity: 1;
   color: rgb(17 24 39 / var(--tw-text-opacity));
+}
+
+.group:hover .group-hover\:duration-1000 {
+  transition-duration: 1000ms;
 }
 
 @media (min-width: 320px) {
@@ -2194,6 +2177,10 @@ video {
     margin-top: 0px;
   }
 
+  .md\:block {
+    display: block;
+  }
+
   .md\:flex {
     display: flex;
   }
@@ -2297,6 +2284,10 @@ video {
     font-size: 1.875rem;
     line-height: 2.25rem;
   }
+
+  .md\:drawer-container {
+    width: calc(100vw - 45%);
+  }
 }
 
 @media (min-width: 990px) {
@@ -2388,6 +2379,15 @@ video {
 .dark\:text-white:where(.dark, .dark *) {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+.dark\:text-black:where(.dark, .dark *) {
+  --tw-text-opacity: 1;
+  color: rgb(0 0 0 / var(--tw-text-opacity));
+}
+
+.even\:dark\:bg-primary\/25:where(.dark, .dark *):nth-child(even) {
+  background-color: rgb(255 212 0 / 0.25);
 }
 
 .dark\:hover\:bg-darkBg:hover:where(.dark, .dark *) {

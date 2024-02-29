@@ -96,7 +96,7 @@
 <header>
   <nav
     id="header"
-    class="fixed top-0 left-0 transition-all duration-700 ease-in-out translate-y-0 h-auto bg-darkBg w-full font-Montserrat !z-50 dark:bg-darkBg">
+    class="fixed top-0 left-0 transition-all duration-700 ease-in-out translate-y-0 h-auto bg-primary w-full font-Montserrat !z-50 dark:bg-darkBg">
     {% comment %} Flowbite navbar {% endcomment %}
 
     <div class="border-b-4 bg-primary dark:bg-darkBg font-Montserrat border-slate-800 border-opacity-10 dark:border-yellow-600">
@@ -492,15 +492,11 @@
   </nav>
 </header>
 
- <style>
+{% comment %} <style>
   .background{
-    color : #FFFFFF
+    background: "{{section.settings. }}"
   }
-
-  .dark\:background:where(.dark, .dark *) 
-    color : {{ section.settings.text_dark }}
-  }
-</style> 
+</style> {% endcomment %}
 
 <script type="application/ld+json">
   {
@@ -562,20 +558,6 @@
       "default": 100,
       "unit": "t:sections.header.settings.logo_width.unit",
       "label": "t:sections.header.settings.logo_width.label"
-    },
-    {
-      "type": "color",
-      "id": "text_light",
-      "label": "t:sections.header.settings.text_light.label",
-      "default": "colors_text",
-      "info": "t:sections.header.settings.text_light.info"
-    },
-    {
-      "type": "color",
-      "id": "text_dark",
-      "label": "t:sections.header.settings.text_dark.label",
-      "default": "colors_text_1",
-      "info": "t:sections.header.settings.text_dark.info"
     },
     {
       "type": "select",

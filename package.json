@@ -1,21 +1,16 @@
 {
-  "name": "shopify-sunrise",
+  "name": "shopify-webibee",
   "version": "1.0.0",
-  "description": "Open-sourced Shopify Store 2.0 Starter theme with Tailwind CSS and Alpinejs. This repo is based on YouTube Course for Shopify Theme development for Store 2.0.",
+  "description": "Open-sourced Shopify Store 2.0 Starter theme with Tailwind CSS .",
   "main": "tailwind.config.js",
   "dependencies": {
-    "@alpinejs/persist": "^3.13.5",
-    "alpinejs": "^3.8.1",
-    "laravel-mix": "^6.0.41",
     "prettier": "^2.5.1",
     "prettier-plugin-tailwindcss": "^0.1.5",
     "resolve-url-loader": "^5.0.0",
-    "sass": "^1.49.7",
-    "sass-loader": "^12.4.0",
     "tailwindcss": "^3.4.1"
   },
   "scripts": {
-    "dev": "shopify theme dev",
+    "dev": "shopify theme dev && npm run tw",
     "check": "shopify theme check",
     "push": "shopify theme push",
     "publish": "shopify theme publish",
